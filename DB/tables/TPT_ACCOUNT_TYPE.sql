@@ -6,7 +6,7 @@ Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-CREATE TABLE IF NOT EXISTS SER.ACCOUNT_TYPE(
+CREATE TABLE IF NOT EXISTS USER.ACCOUNT_TYPE(
     account_type_id NUMBER PRIMARY KEY,
     account_name VARCHAR2(15) NOT NULL,
     rate DECIMAL(5,4) NOT NULL

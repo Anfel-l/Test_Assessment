@@ -6,4 +6,5 @@ Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-ALTER TABLE
+ALTER TABLE USER.DOCUMENT_TYPE ADD CONSTRAINT PK_DOCUMENT_TYPE PRIMARY KEY (document_type_id)
+/

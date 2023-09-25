@@ -1,10 +1,9 @@
 /*******************************************************************************
-Description: Table that stores the information of the bank's clients
+Description: Foreing Key from account table to customer table
 Author: Team B
-Date: 22-09-23
+Date: 25-09-23
 Management_id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
-
-ALTER TABLE USER.TRANSACTION ADD CONSTRAINT PK_TRANSACTION PRIMARY KEY (transaction_id)
+ALTER TABLE USER.ACCOUNT ADD CONSTRAINT FK_ACCOUNT_BANK_BRANCH FOREIGN KEY (created_branch_id) REFERENCES USER.BANK_BRANCH (bank_branch_id)
 /
