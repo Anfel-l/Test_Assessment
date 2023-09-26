@@ -24,3 +24,5 @@ INSERT INTO USER.ACCOUNT_TYPE (account_type_id, account_name, rate) VALUES ()
 /
 INSERT INTO USER.ACCOUNT_TYPE (account_type_id, account_name, rate) VALUES ()
 /
+
+
