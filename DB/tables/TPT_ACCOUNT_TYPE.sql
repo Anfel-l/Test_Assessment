@@ -7,7 +7,7 @@ Management Id: XD01
 *******************************************************************************/
 
 CREATE TABLE IF NOT EXISTS USER.ACCOUNT_TYPE(
-    account_type_id NUMBER PRIMARY KEY,
+    account_type_id NUMBER(10),
     account_name VARCHAR2(15) NOT NULL,
     rate DECIMAL(5,4) NOT NULL
 )
