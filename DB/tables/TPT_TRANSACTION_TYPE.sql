@@ -7,19 +7,19 @@ Management Id: XD01
 *******************************************************************************/
 
 CREATE TABLE IF NOT EXISTS USER.TRANSACTION_TYPE(
-    transaction_id NUMBER(10) NOT NULL,
+    transaction_type_id NUMBER(10) NOT NULL,
     description VARCHAR2(50) NOT NULL
 )
 /
-INSERT INTO USER.TRANSACTION_TYPE (transaction_type_code, description) VALUES ('1', 'Retiro')
+INSERT INTO USER.TRANSACTION_TYPE (transaction_type_id, description) VALUES ('1', 'Retiro')
 /
-INSERT INTO USER.TRANSACTION_TYPE (transaction_type_code, description) VALUES ('2', 'Consignación')
+INSERT INTO USER.TRANSACTION_TYPE (transaction_type_id, description) VALUES ('2', 'Consignación')
 /
-INSERT INTO USER.TRANSACTION_TYPE (transaction_type_code, description) VALUES ('3', 'Interéses')
+INSERT INTO USER.TRANSACTION_TYPE (transaction_type_id, description) VALUES ('3', 'Interéses')
 /
 COMMENT ON TABLE USER.TRANSACTION_TYPE IS 'Document type table'
 /
-COMMENT ON COLUMN USER.TRANSACTION_TYPE.transaction_id IS 'Unique identifier for the transaction type. It is the primary key for the table.'
+COMMENT ON COLUMN USER.TRANSACTION_TYPE.transaction_type_id IS 'Unique identifier for the transaction type. It is the primary key for the table.'
 /
 COMMENT ON COLUMN USER.TRANSACTION_TYPE.description IS 'Description of the transaction type, explaining what each code represents.'
 /
