@@ -6,12 +6,12 @@ Management_id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-CREATE TABLE IF NOT EXISTS USER.DOCUMENT_TYPE(
+CREATE TABLE USER.DOCUMENT_TYPE(
     document_type_id NUMBER(10),
     type_code VARCHAR2(20),
     description VARCHAR2(50)
-)
-/
+) TABLESPACE TS_MANAGER;
+
 COMMENT ON TABLE USER.DOCUMENT_TYPE IS 'Table that stores the different types of documents that a customer can have.'
 /
 COMMENT ON COLUMN USER.DOCUMENT_TYPE.document_type_id IS 'Unique identifier for the document type. It is the primary key for the table.'

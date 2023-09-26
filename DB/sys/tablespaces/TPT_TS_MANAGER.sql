@@ -5,8 +5,8 @@ Date 22-09-23
 Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
-
-CREATE ROLE ROL_USER_DBA;
-
--- PERMISSIONS
-GRANT DBA TO ROL_USER_DBA;
+CREATE TABLESPACE TS_MANAGER
+DATAFILE '/TS_TPT_MANAGER.DBF'
+SIZE 100M AUTOEXTEND ON
+NEXT 50M MAXSIZE UNLIMITED;
+/

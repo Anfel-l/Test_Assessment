@@ -6,7 +6,7 @@ Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-CREATE TABLE IF NOT EXISTS USER.ACCOUNT (
+CREATE TABLE USER.ACCOUNT (
     account_id NUMBER(10),
     customer_id NUMBER(10),
     account_type_id NUMBER(10),
@@ -15,8 +15,7 @@ CREATE TABLE IF NOT EXISTS USER.ACCOUNT (
     closing_date TIMESTAMP,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-)
-/
+) TABLESPACE TS_MANAGER;
 
 -- Table
 COMMENT ON TABLE USER.ACCOUNT IS 'Account table'

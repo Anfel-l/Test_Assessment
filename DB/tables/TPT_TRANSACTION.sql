@@ -6,7 +6,7 @@ Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-CREATE TABLE IF NOT EXISTS USER.TRANSACTION(
+CREATE TABLE USER.TRANSACTION(
     transaction_id NUMBER(10),
     transaction_type_id NUMBER(10),
     bank_branch_id NUMBER(10),
@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS USER.TRANSACTION(
     destination_account_id NUMBER(10),
     amount NUMBER(10) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-)
-/
+) TABLESPACE TS_MANAGER;
+
 COMMENT ON TABLE USER.TRANSACTION IS 'Transaction table'
 /
 COMMENT ON COLUMN USER.TRANSACTION.transaction_id IS 'Unique identifier for the transaction'
