@@ -21,5 +21,5 @@ COMMENT ON TABLE USER.TRANSACTION_TYPE IS 'Document type table'
 /
 COMMENT ON COLUMN USER.TRANSACTION_TYPE.transaction_type_code IS 'Unique code representing the type of transaction. It is the primary key for the table.'
 /
-COMMENT ON COLUMN USER.DOCUMENT_TRANSACTION_TYPETYPE.description IS 'Description of the transaction type, explaining what each code represents.'
+COMMENT ON COLUMN USER.TRANSACTION_TYPE.description IS 'Description of the transaction type, explaining what each code represents.'
 /
