@@ -7,3 +7,4 @@ Management_id: XD01
 *******************************************************************************/
 ALTER TABLE USER.ACCOUNT ADD CONSTRAINT FK_ACCOUNT_BANK_BRANCH FOREIGN KEY (created_branch_id) REFERENCES USER.BANK_BRANCH (bank_branch_id)
 /
+
