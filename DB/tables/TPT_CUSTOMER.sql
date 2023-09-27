@@ -18,6 +18,7 @@ CREATE TABLE USER.CUSTOMER(
     address VARCHAR2(100) NOT NULL,
     email VARCHAR2(50) NOT NULL,
     phone_number VARCHAR2(20) NOT NULL,
+    password VARCHAR2(20) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) TABLESPACE TS_MANAGER;
@@ -48,6 +49,8 @@ COMMENT ON COLUMN USER.CUSTOMER.address IS 'Address of the customer'
 COMMENT ON COLUMN USER.CUSTOMER.email IS 'Email of the customer'
 /
 COMMENT ON COLUMN USER.CUSTOMER.phone_number IS 'Phone number of the customer'
+/
+COMMENT ON COLUMN USER.CUSTOMER.password IS 'Password of the customer'
 /
 COMMENT ON COLUMN USER.CUSTOMER.created_at IS 'Date when the customers record was created'
 /
