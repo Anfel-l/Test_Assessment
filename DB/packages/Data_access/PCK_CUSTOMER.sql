@@ -1,4 +1,3 @@
-
 CREATE OR REPLACE PACKAGE PCK_CUSTOMER IS
 /*******************************************************************************
 Description: Table that stores information about bank's transactions
@@ -8,21 +7,25 @@ Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-  /* Public data types declaration */
+/*la gente e pueblo la gente e pueblo weweewweww*/
 
-  SUBTYPE tyrcCUSTOMER IS CUSTOMER%ROWTYPE;
+	/* Public data types declaration */
 
-  TYPE tytbCUSTOMER IS TABLE OF tyrcCUSTOMER INDEX BY binary_integer;
+	SUBTYPE tyrcCUSTOMER IS CUSTOMER%ROWTYPE;
 
-  /* Public variables declaration */
+	TYPE tytbCUSTOMER IS TABLE OF tyrcCUSTOMER INDEX BY BINARY_INTEGER;
+
+	/* Public variables declaration */
 
 
 
-  /* Public methods and functions declaration */
+	/* Public methods and functions declaration */
 
-  PROCEDURE insCUSTOMER (objCustomer in out nocopy tyrcCUSTOMER);
+	PROCEDURE Proc_Insert_CUSTOMER (IOp_Customer IN OUT NOCOPY tyrcCUSTOMER);
 
-  PROCEDURE getCUSTOMER (id in NUMBER, objCustomer out nocopy tyrcCUSTOMER);
+	PROCEDURE Proc_Get_CUSTOMER (Ip_Id IN NUMBER, Op_Customer OUT NOCOPY tyrcCUSTOMER);
+
+	PROCEDURE Proc_Update_CUSTOMER (Ip_Id IN NUMBER, IOp_Customer IN OUT NOCOPY tyrcCUSTOMER);
 
 END PCK_CUSTOMER;
 
@@ -30,46 +33,58 @@ END PCK_CUSTOMER;
 
 CREATE OR REPLACE PACKAGE BODY PCK_CUSTOMER IS
 
-  /* Insert customer */
-  PROCEDURE insCUSTOMER (objCustomer in out nocopy tyrcCUSTOMER) IS
+	/* Insert customer */
+	PROCEDURE Proc_Insert_CUSTOMER (IOp_Customer IN OUT NOCOPY tyrcCUSTOMER) IS
 
-    CUSTOM_EXCEPTION EXCEPTION;
+	BEGIN
+		-- Initialize values
+		IOp_Customer.customer_id := SEQ_CUSTOMER.NEXTVAL;
 
-  BEGIN
-    -- Initialize values
-    customer.customer_id := SEQ_CUSTOMER.NEXTVAL;
+		-- Insert value
+		INSERT INTO CUSTOMER VALUES /*+PCK_CUSTOMER.Proc_Insert_CUSTOMER*/ IOp_Customer;
 
-    -- Insert value
-    INSERT INTO CUSTOMER VALUES /*+PCK_CUSTOMER.insCUSTOMER*/ objCustomer;
+	EXCEPTION
+		WHEN DUP_VAL_ON_INDEX THEN
+            RAISE_APPLICATION_ERROR(-20000, 'Error: Valor duplicado en la clave primaria o única [PCK_CUSTOMER.insCUSTOMER]');
+		WHEN OTHERS THEN
+			RAISE_APPLICATION_ERROR(-20001, SQLCODE || ' => ' || SQLERRM);
+	END Proc_Insert_CUSTOMER;
 
-  EXCEPTION
-    WHEN CUSTOM_EXCEPTION THEN
-      RAISE_APPLICATION_ERROR(-20001, 'Error creating customer [PCK_CUSTOMER.insCUSTOMER]');
-    WHEN OTHERS THEN
-      RAISE_APPLICATION_ERROR(-20000, SQLCODE || ' => ' || SQLERRM);
-  END insCUSTOMER;
+	/* Get customer by id */
+	PROCEDURE Proc_Get_CUSTOMER (Ip_Id IN NUMBER, Op_Customer OUT NOCOPY tyrcCUSTOMER) IS
 
-  /* Get customer by id */
-  PROCEDURE getCUSTOMER (id in NUMBER, objCustomer out nocopy tyrcCUSTOMER) IS
+		CUSTOM_EXCEPTION EXCEPTION;
 
-    CUSTOM_EXCEPTION EXCEPTION;
+		-- Indicar columnas
+		CURSOR cur_CUSTOMER IS
+		SELECT 
+			customer_id, 
+			first_name, 
+			second_name, 
+			last_name, 
+			second_last_name,
+			birthdate, 
+			document, 
+			document_type_id, 
+			address, 
+			email, 
+			phone_number,
+			password,
+			created_at,
+			updated_at
+		FROM CUSTOMER
+		WHERE /*+PCK_CUSTOMER.Proc_Get_CUSTOMER*/ customer_id = Ip_Id;
 
-    -- indicar columnas
-    CURSOR curCUSTOMER IS
-      SELECT *
-      FROM CUSTOMER
-      WHERE /*+PCK_CUSTOMER.getCUSTOMER*/ customer_id = id;
+	BEGIN
+		OPEN cur_CUSTOMER;
+		FETCH cur_CUSTOMER INTO Op_Customer;
+		CLOSE cur_CUSTOMER;
 
-  BEGIN
-    OPEN curCUSTOMER;
-    FETCH curCUSTOMER INTO objCustomer;
-    CLOSE curCUSTOMER;
-
-  EXCEPTION
-    /* WHEN CUSTOM_EXCEPTION THEN
-      RAISE_APPLICATION_ERROR(-20001, 'Error creating customer [PCK_CUSTOMER.insCUSTOMER]');
-    WHEN OTHERS THEN
-      RAISE_APPLICATION_ERROR(-20000, SQLCODE || ' => ' || SQLERRM); */
-  END insCUSTOMER;
+	EXCEPTION
+		WHEN NO_DATA_FOUND THEN 
+            RAISE_APPLICATION_ERROR(-20150, 'Error: No hay ningun resultado [PCK_ACCOUNT_TYPE.Proc_Get_CUSTOMER]');
+        WHEN OTHERS THEN
+            RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
+	END Proc_Get_CUSTOMER;
 
 END;
