@@ -6,6 +6,7 @@ Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-ALTER TABLE USER.ACCOUNT_TYPE ADD CONSTRAINT PK_ACCOUNT_TYPE PRIMARY KEY (account_type_id)
-/
+CREATE ROLE ROL_USER_DBA;
 
+-- PERMISSIONS
+GRANT DBA TO ROL_USER_DBA;

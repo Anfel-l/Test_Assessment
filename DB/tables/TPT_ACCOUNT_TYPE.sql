@@ -6,12 +6,12 @@ Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-CREATE TABLE IF NOT EXISTS USER.ACCOUNT_TYPE(
+CREATE TABLE USER.ACCOUNT_TYPE(
     account_type_id NUMBER(10),
     account_name VARCHAR2(15) NOT NULL,
     rate DECIMAL(5,4) NOT NULL
-)
-/
+) TABLESPACE TS_MANAGER;
+
 COMMENT ON TABLE USER.ACCOUNT_TYPE IS 'Table that stores the different types of accounts available in the bank'
 /
 COMMENT ON COLUMN USER.ACCOUNT_TYPE.account_type_id IS 'Unique identifier for each account type.'

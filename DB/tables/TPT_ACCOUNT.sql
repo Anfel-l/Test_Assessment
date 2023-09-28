@@ -6,17 +6,17 @@ Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-CREATE TABLE IF NOT EXISTS USER.ACCOUNT (
+CREATE TABLE USER.ACCOUNT (
     account_id NUMBER(10),
     customer_id NUMBER(10),
     account_type_id NUMBER(10),
     created_branch_id NUMBER(10),
     balance NUMBER(15) DEFAULT NULL,
+    password VARCHAR2(4) NOT NULL,
     closing_date TIMESTAMP,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-)
-/
+) TABLESPACE TS_MANAGER;
 
 -- Table
 COMMENT ON TABLE USER.ACCOUNT IS 'Account table'
@@ -32,6 +32,8 @@ COMMENT ON COLUMN USER.ACCOUNT.account_type_id IS 'Unique identifier for the cus
 COMMENT ON COLUMN USER.ACCOUNT.created_branch_id IS 'Unique identifier for the branch'
 /
 COMMENT ON COLUMN USER.ACCOUNT.balance IS 'Account balance'
+/
+COMMENT ON COLUMN USER.ACCOUNT.password IS 'Account password'
 /
 COMMENT ON COLUMN USER.ACCOUNT.closing_date IS 'Date account registration was closed'
 /

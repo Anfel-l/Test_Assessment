@@ -6,11 +6,11 @@ Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-CREATE TABLE IF NOT EXISTS USER.TRANSACTION_TYPE(
+CREATE TABLE USER.TRANSACTION_TYPE(
     transaction_type_id NUMBER(10) NOT NULL,
     description VARCHAR2(50) NOT NULL
-)
-/
+) TABLESPACE TS_MANAGER;
+
 INSERT INTO USER.TRANSACTION_TYPE (transaction_type_id, description) VALUES ('1', 'Retiro')
 /
 INSERT INTO USER.TRANSACTION_TYPE (transaction_type_id, description) VALUES ('2', 'Consignación')

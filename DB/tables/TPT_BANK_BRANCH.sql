@@ -6,7 +6,7 @@ Management_id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-CREATE TABLE IF NOT EXISTS USER.BANK_BRANCH(
+CREATE TABLE USER.BANK_BRANCH(
     bank_branch_id NUMBER(10),
     branch_name VARCHAR2(50),
     address VARCHAR2(100),
@@ -14,8 +14,7 @@ CREATE TABLE IF NOT EXISTS USER.BANK_BRANCH(
     is_digital NUMBER(1,0),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-)
-/
+) TABLESPACE TS_MANAGER;
 
 -- Table
 COMMENT ON TABLE USER.CUSTOMER IS 'Bank branch table'
