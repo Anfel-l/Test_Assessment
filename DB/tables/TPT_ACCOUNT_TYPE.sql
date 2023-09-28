@@ -20,7 +20,9 @@ COMMENT ON COLUMN USER.ACCOUNT_TYPE.account_name IS 'Name of the account type.'
 /
 COMMENT ON COLUMN USER.ACCOUNT_TYPE.rate IS 'Interest rate associated with the account type.'
 /
-INSERT INTO USER.ACCOUNT_TYPE (account_type_id, account_name, rate) VALUES ()
+INSERT INTO USER.ACCOUNT_TYPE (account_name, rate) VALUES ('CDT', 0.4)
 /
-INSERT INTO USER.ACCOUNT_TYPE (account_type_id, account_name, rate) VALUES ()
+INSERT INTO USER.ACCOUNT_TYPE (account_name, rate) VALUES ('Cuenta de ahorro', 0.8)
+/
+INSERT INTO USER.ACCOUNT_TYPE (account_name, rate) VALUES ('Cuenta corriente', 0.5)
 /

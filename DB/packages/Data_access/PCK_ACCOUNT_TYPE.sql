@@ -1,4 +1,3 @@
-
 CREATE OR REPLACE PACKAGE PCK_ACCOUNT_TYPE IS
 /*******************************************************************************
 Description: Table that stores information about bank's transactions
@@ -12,7 +11,7 @@ Management Id: XD01
 
     SUBTYPE tyrcACCOUNTTYPE IS ACCOUNT_TYPE%ROWTYPE;
 
-    TYPE tytbACCOUNTTYPE IS TABLE OF tyrcACCOUNTTYPE INDEX BY BYNARY_INTEGER;
+    TYPE tytbACCOUNTTYPE IS TABLE OF tyrcACCOUNTTYPE INDEX BY BINARY_INTEGER;
 
     /* Public variables declaration */
 
@@ -20,11 +19,54 @@ Management Id: XD01
 
     /* Public methods and functions declaration */
 
-    PROCEDURE Proc_Insert_ACCOUNTTYPE (IOp_Account_Type IN OUT NOCOPY tyrcACCOUNTTYPE);
+    /*******************************************************************************
+    Description: Procedure that inserts an account type object
+    Author: Team B
+    Date 28-09-23
+    Management Id: XD01
+    @copyright: Seguros Bolívar
+    *******************************************************************************/
+    PROCEDURE Proc_Insert_ACCOUNTTYPE
+    (
+        IOp_Account_Type IN OUT NOCOPY tyrcACCOUNTTYPE
+    );
 
-    PROCEDURE Proc_Get_ACCOUNTTYPE (Ip_Id in NUMBER, Op_Account_Type OUT NOCOPY tyrcACCOUNTTYPE);
+    /*******************************************************************************
+    Description: Procedure that obtains all account types
+    Author: Team B
+    Date 28-09-23
+    Management Id: XD01
+    @copyright: Seguros Bolívar
+    *******************************************************************************/
+    PROCEDURE Proc_Get_All_ACCOUNTTYPE
+    (
+        Op_Account_Type OUT tytbACCOUNTTYPE
+    );
 
-    PROCEDURE Proc_Update_ACCOUNTTYPE (Ip_Id IN NUMBER, IOp_Account_Type IN OUT NOCOPY tyrcACCOUNTTYPE);
+    /*******************************************************************************
+    Description: Procedure that obtains an account type object
+    Author: Team B
+    Date 28-09-23
+    Management Id: XD01
+    @copyright: Seguros Bolívar
+    *******************************************************************************/
+    PROCEDURE Proc_Get_ACCOUNTTYPE
+    (
+        Ip_Id in NUMBER,
+        Op_Account_Type OUT NOCOPY tyrcACCOUNTTYPE
+    );
+
+    /*******************************************************************************
+    Description: Procedure that updates an account type object
+    Author: Team B
+    Date 28-09-23
+    Management Id: XD01
+    @copyright: Seguros Bolívar
+    *******************************************************************************/
+    PROCEDURE Proc_Update_ACCOUNTTYPE
+    (
+        IOp_Account_Type IN OUT NOCOPY tyrcACCOUNTTYPE
+    );
 
 END PCK_ACCOUNT_TYPE;
 
@@ -33,7 +75,7 @@ END PCK_ACCOUNT_TYPE;
 CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT_TYPE IS
 
     /*Insert an account type*/
-    PROCEDURE Proc_insACCOUNTTYPE(IOp_Account_Type IN OUT NOCOPY tyrcACCOUNTTYPE) is
+    PROCEDURE Proc_Insert_ACCOUNTTYPE(IOp_Account_Type IN OUT NOCOPY tyrcACCOUNTTYPE) IS
 
     BEGIN
 
@@ -41,7 +83,7 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT_TYPE IS
         IOp_Account_Type.account_type_id := SEQ_ACCOUNT_TYPE.NEXTVAL;
 
         -- Insert register
-        INSERT INTO ACCOUNT_TYPE VALUES /*+PCK_ACCOUNT_TYPE.Proc_insACCOUNTTYPE*/ IOp_Account_Type;
+        INSERT INTO ACCOUNT_TYPE VALUES /*+PCK_ACCOUNT_TYPE.Proc_Insert_ACCOUNTTYPE*/ IOp_Account_Type;
 
     -- Trow Exception
     EXCEPTION
@@ -49,12 +91,33 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT_TYPE IS
             RAISE_APPLICATION_ERROR(-20000, 'Error: Valor duplicado en la clave primaria o única [PCK_ACCOUNT_TYPE.insACCOUNTTYPE]');
         WHEN OTHERS THEN
             RAISE_APPLICATION_ERROR(-20001, SQLCODE || ' => ' || SQLERRM);
-    END Proc_insACCOUNTTYPE;
-    
-    
-    PROCEDURE Proc_Get_ACCOUNTTYPE (Ip_Id in NUMBER, Op_Account_Type out nocopy tyrcACCOUNTTYPE) IS
+    END Proc_Insert_ACCOUNTTYPE;
 
-        ACCOUNT_TYPE_EXCEPTION EXCEPTION; 
+
+    /* Get All */
+    PROCEDURE Proc_Get_All_ACCOUNTTYPE(Op_Account_Type OUT tytbACCOUNTTYPE) IS
+    	ACCOUNT_TYPE_EXCEPTION EXCEPTION;
+    	CURSOR cur_ACCOUNTTYPE IS
+	        SELECT 
+	            account_type_id,
+	            account_name,
+	            rate
+	        FROM ACCOUNT_TYPE;
+		    idx BINARY_INTEGER := 1;
+	BEGIN
+	    FOR rec IN cur_ACCOUNTTYPE LOOP
+	        Op_Account_Type(idx) := rec;
+	        idx := idx + 1;
+	    END LOOP;
+	EXCEPTION
+	    WHEN NO_DATA_FOUND THEN 
+	        RAISE_APPLICATION_ERROR(-20150, 'Error: No hay ningun resultado [PCK_ACCOUNT_TYPE.Proc_Get_ACCOUNTTYPE]');
+	    WHEN OTHERS THEN
+	        RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
+	END Proc_Get_All_ACCOUNTTYPE;
+   
+    /* Get By Id*/
+    PROCEDURE Proc_Get_ACCOUNTTYPE (Ip_Id IN NUMBER, Op_Account_Type OUT NOCOPY tyrcACCOUNTTYPE) IS
 
         CURSOR cur_ACCOUNTTYPE IS
             SELECT 
@@ -77,32 +140,22 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT_TYPE IS
     END Proc_Get_ACCOUNTTYPE;
 
 
-    /*update */
-    PROCEDURE Proc_Update_ACCOUNTTYPE (Ip_Id IN NUMBER, IOp_Account_Type IN OUT tyrcACCOUNTTYPE) IS
+    /*update*/
+    PROCEDURE Proc_Update_ACCOUNTTYPE (IOp_Account_Type IN OUT tyrcACCOUNTTYPE) IS
         ACCOUNT_TYPE_EXCEPTION EXCEPTION;
     BEGIN
-        -- Validación de entradas, si es necesario
-        IF Ip_Id IS NULL OR IOp_Account_Type IS NULL THEN
-            RAISE ACCOUNT_TYPE_EXCEPTION;
-        END IF;
+        /* Update record */
         
-        -- Actualizar registro
         UPDATE ACCOUNT_TYPE
-        SET column1 = newObjAccountType.column1,
-            column2 = newObjAccountType.column2,
-            
-        WHERE account_type_id = Ip_Id;
-        
-        IF SQL%NOTFOUND THEN
-            RAISE ACCOUNT_TYPE_EXCEPTION;
-        END IF;
-        
+        SET rate = IOp_Account_Type.rate
+        WHERE account_type_id = IOp_Account_Type.account_type_id;
+
+        /*actualizar variable IOp_Account_Type para su salida con el get by id*/
+
     EXCEPTION
-        WHEN ACCOUNT_TYPE_EXCEPTION THEN
-            RAISE_APPLICATION_ERROR(-20150, 'Error updating ACCOUNT_TYPE with id ' || TO_CHAR(Ip_Id) || ' [PCK_ACCOUNT_TYPE.updACCOUNTTYPE]');
         WHEN OTHERS THEN
             RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
-    END updACCOUNTTYPE;
+    END Proc_Update_ACCOUNTTYPE;
 
-END;
+END PCK_ACCOUNT_TYPE;
     

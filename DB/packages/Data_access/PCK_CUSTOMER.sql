@@ -7,8 +7,6 @@ Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-/*la gente e pueblo la gente e pueblo weweewweww*/
-
 	/* Public data types declaration */
 
 	SUBTYPE tyrcCUSTOMER IS CUSTOMER%ROWTYPE;
@@ -21,11 +19,42 @@ Management Id: XD01
 
 	/* Public methods and functions declaration */
 
-	PROCEDURE Proc_Insert_CUSTOMER (IOp_Customer IN OUT NOCOPY tyrcCUSTOMER);
+	/*******************************************************************************
+	Description: Procedure that inserts a customer object
+	Author: Team B
+	Date 28-09-23
+	Management Id: XD01
+	@copyright: Seguros Bolívar
+	*******************************************************************************/
+	PROCEDURE Proc_Insert_CUSTOMER
+	(
+		IOp_Customer IN OUT NOCOPY tyrcCUSTOMER
+	);
 
-	PROCEDURE Proc_Get_CUSTOMER (Ip_Id IN NUMBER, Op_Customer OUT NOCOPY tyrcCUSTOMER);
+	/*******************************************************************************
+	Description: Procedure that obtains a customer object
+	Author: Team B
+	Date 28-09-23
+	Management Id: XD01
+	@copyright: Seguros Bolívar
+	*******************************************************************************/
+	PROCEDURE Proc_Get_CUSTOMER
+	(
+		Ip_Id IN NUMBER,
+		Op_Customer OUT NOCOPY tyrcCUSTOMER
+	);
 
-	PROCEDURE Proc_Update_CUSTOMER (Ip_Id IN NUMBER, IOp_Customer IN OUT NOCOPY tyrcCUSTOMER);
+	/*******************************************************************************
+	Description: Procedure that updates a customer object
+	Author: Team B
+	Date 28-09-23
+	Management Id: XD01
+	@copyright: Seguros Bolívar
+	*******************************************************************************/
+	PROCEDURE Proc_Update_CUSTOMER
+	(
+		IOp_Customer IN OUT NOCOPY tyrcCUSTOMER
+	);
 
 END PCK_CUSTOMER;
 
@@ -80,10 +109,21 @@ CREATE OR REPLACE PACKAGE BODY PCK_CUSTOMER IS
 		CLOSE cur_CUSTOMER;
 
 	EXCEPTION
-		WHEN NO_DATA_FOUND THEN 
+		WHEN NO_DATA_FOUND THEN
             RAISE_APPLICATION_ERROR(-20150, 'Error: No hay ningun resultado [PCK_ACCOUNT_TYPE.Proc_Get_CUSTOMER]');
         WHEN OTHERS THEN
             RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
 	END Proc_Get_CUSTOMER;
 
-END;
+	/* Update customer */
+	PROCEDURE Proc_Update_CUSTOMER (IOp_Customer IN OUT NOCOPY tyrcCUSTOMER) IS
+
+	BEGIN
+
+	EXCEPTION
+		WHEN OTHERS THEN
+			RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
+
+	END Proc_Update_CUSTOMER;
+
+END PCK_CUSTOMER;
