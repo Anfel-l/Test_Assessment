@@ -33,15 +33,15 @@ END PCK_ACCOUNT_TYPE;
 CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT_TYPE IS
 
     /*Insert an account type*/
-    PROCEDURE Proc_insACCOUNTTYPE(IOp_ObjAccountType IN OUT NOCOPY tyrcACCOUNTTYPE) is
+    PROCEDURE Proc_insACCOUNTTYPE(IOp_Account_Type IN OUT NOCOPY tyrcACCOUNTTYPE) is
 
     BEGIN
 
         -- Initialize values
-        IOp_ObjAccountType.account_type_id := SEQ_ACCOUNT_TYPE.NEXTVAL;
+        IOp_Account_Type.account_type_id := SEQ_ACCOUNT_TYPE.NEXTVAL;
 
         -- Insert register
-        INSERT INTO ACCOUNT_TYPE VALUES /*+PCK_ACCOUNT_TYPE.Proc_insACCOUNTTYPE*/ IOp_ObjAccountType;
+        INSERT INTO ACCOUNT_TYPE VALUES /*+PCK_ACCOUNT_TYPE.Proc_insACCOUNTTYPE*/ IOp_Account_Type;
 
     -- Trow Exception
     EXCEPTION
@@ -52,22 +52,21 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT_TYPE IS
     END Proc_insACCOUNTTYPE;
     
     
-    PROCEDURE Proc_Get_ACCOUNTTYPE (Ip_Id in NUMBER, Op_accountType out nocopy tyrcACCOUNTTYPE) IS
+    PROCEDURE Proc_Get_ACCOUNTTYPE (Ip_Id in NUMBER, Op_Account_Type out nocopy tyrcACCOUNTTYPE) IS
 
         ACCOUNT_TYPE_EXCEPTION EXCEPTION; 
 
-        -- Indicar columnas
         CURSOR cur_ACCOUNTTYPE IS
             SELECT 
-            account_type_id,
-            account_name,
-            rate 
+                account_type_id,
+                account_name,
+                rate 
             FROM ACCOUNT_TYPE
             WHERE /*+PCK_ACCOUNT_TYPE.Proc_Get_ACCOUNTTYPE*/ account_type_id = Ip_Id;
 
     BEGIN
         OPEN cur_ACCOUNTTYPE;
-        FETCH cur_ACCOUNTTYPE INTO objACCOUNTTYPE;
+        FETCH cur_ACCOUNTTYPE INTO Op_Account_Type;
         CLOSE cur_ACCOUNTTYPE;
     
     EXCEPTION 
@@ -79,11 +78,11 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT_TYPE IS
 
 
     /*update */
-    PROCEDURE Proc_Update_ACCOUNTTYPE (Ip_Id IN NUMBER, IOp_New_Obj_Account_Type IN OUT tyrcACCOUNTTYPE) IS
+    PROCEDURE Proc_Update_ACCOUNTTYPE (Ip_Id IN NUMBER, IOp_Account_Type IN OUT tyrcACCOUNTTYPE) IS
         ACCOUNT_TYPE_EXCEPTION EXCEPTION;
     BEGIN
         -- Validación de entradas, si es necesario
-        IF Ip_Id IS NULL OR IOp_New_Obj_Account_Type IS NULL THEN
+        IF Ip_Id IS NULL OR IOp_Account_Type IS NULL THEN
             RAISE ACCOUNT_TYPE_EXCEPTION;
         END IF;
         
