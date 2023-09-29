@@ -98,7 +98,7 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT_TYPE IS
     PROCEDURE Proc_Get_All_ACCOUNTTYPE(Op_Account_Type OUT tytbACCOUNTTYPE) IS
     	ACCOUNT_TYPE_EXCEPTION EXCEPTION;
     	CURSOR cur_ACCOUNTTYPE IS
-	        SELECT 
+	        SELECT
 	            account_type_id,
 	            account_name,
 	            rate
@@ -115,7 +115,7 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT_TYPE IS
 	    WHEN OTHERS THEN
 	        RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
 	END Proc_Get_All_ACCOUNTTYPE;
-   
+
     /* Get By Id*/
     PROCEDURE Proc_Get_ACCOUNTTYPE (Ip_Id IN NUMBER, Op_Account_Type OUT NOCOPY tyrcACCOUNTTYPE) IS
 
@@ -141,16 +141,18 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT_TYPE IS
 
 
     /*update*/
-    PROCEDURE Proc_Update_ACCOUNTTYPE (IOp_Account_Type IN OUT tyrcACCOUNTTYPE) IS
+    PROCEDURE Proc_Update_ACCOUNTTYPE (IOp_Account_Type IN OUT NOCOPY tyrcACCOUNTTYPE) IS
         ACCOUNT_TYPE_EXCEPTION EXCEPTION;
+        v_updated_record tyrcACCOUNTTYPE;
     BEGIN
         /* Update record */
-        
+
         UPDATE ACCOUNT_TYPE
         SET rate = IOp_Account_Type.rate
         WHERE account_type_id = IOp_Account_Type.account_type_id;
-
-        /*actualizar variable IOp_Account_Type para su salida con el get by id*/
+       
+		Proc_Get_ACCOUNTTYPE(IOp_Account_Type.account_type_id, v_updated_record);
+		IOp_Account_Type := v_updated_record;
 
     EXCEPTION
         WHEN OTHERS THEN

@@ -61,18 +61,27 @@ CREATE OR REPLACE PACKAGE BODY PCK_DOCUMENT_TYPE IS
             RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
     END Proc_Get_DOCUMENT_TYPE;
     
+
+    
     /* Procedure to update a document type */
     PROCEDURE Proc_Update_DOCUMENT_TYPE(IOp_Document_Type IN OUT NOCOPY tyrcDOCUMENT_TYPE) IS
-    BEGIN
-        UPDATE DOCUMENT_TYPE
-        SET type_code = IOp_Document_Type.type_code,
-            description = IOp_Document_Type.description
-        WHERE document_type_id = IOp_Document_Type.document_type_id;
-    EXCEPTION
-        WHEN NO_DATA_FOUND THEN
-            RAISE_APPLICATION_ERROR(-20150, 'Error: No hay ningun resultado [PCK_DOCUMENT_TYPE.updDOCUMENT_TYPE]');
-        WHEN OTHERS THEN
-            RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
-    END Proc_Update_DOCUMENT_TYPE;
-    
+BEGIN
+    UPDATE DOCUMENT_TYPE
+    SET type_code = IOp_Document_Type.type_code,
+        description = IOp_Document_Type.description
+    WHERE document_type_id = IOp_Document_Type.document_type_id;
+
+    IF SQL%ROWCOUNT = 0 THEN
+        RAISE_APPLICATION_ERROR(-20150, 'Error: No hay ningun resultado [PCK_DOCUMENT_TYPE.updDOCUMENT_TYPE]');
+    END IF;
+
+    -- Obtener el registro actualizado y asignarlo a IOp_Document_Type
+    Proc_Get_DOCUMENT_TYPE(IOp_Document_Type.document_type_id, IOp_Document_Type);
+
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
+END Proc_Update_DOCUMENT_TYPE;
+
+
 END PCK_DOCUMENT_TYPE;

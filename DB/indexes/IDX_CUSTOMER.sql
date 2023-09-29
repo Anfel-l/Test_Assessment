@@ -6,5 +6,5 @@ Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-CREATE UNIQUE INDEX USER.IDX_CUSTOMER_01
-ON USER.CUSTOMER (document);
+CREATE UNIQUE INDEX TPT_USER_DBA.IDX_CUSTOMER_01
+ON TPT_USER_DBA.CUSTOMER (document);

@@ -6,5 +6,5 @@ Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-ALTER TABLE USER.ACCOUNT ADD CONSTRAINT PK_ACCOUNT PRIMARY KEY (account_id)
+ALTER TABLE TPT_USER_DBA.ACCOUNT ADD CONSTRAINT PK_ACCOUNT PRIMARY KEY (account_id)
 /
