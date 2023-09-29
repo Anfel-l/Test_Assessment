@@ -31,6 +31,7 @@ Management Id: XD01
 		IOp_Customer IN OUT NOCOPY tyrcCUSTOMER
 	);
 
+
 	/*******************************************************************************
 	Description: Procedure that obtains all customers
 	Author: Team B
@@ -42,6 +43,7 @@ Management Id: XD01
 	(
 		Op_Customer OUT NOCOPY tytbCUSTOMER
 	);
+
 
 	/*******************************************************************************
 	Description: Procedure that obtains a customer object
@@ -55,6 +57,7 @@ Management Id: XD01
 		Ip_Id IN NUMBER,
 		Op_Customer OUT NOCOPY tyrcCUSTOMER
 	);
+
 
 	/*******************************************************************************
 	Description: Procedure that updates a customer object

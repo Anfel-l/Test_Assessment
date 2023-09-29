@@ -23,7 +23,7 @@ Management Id: XD01
 	Management Id: XD01
 	@copyright: Seguros Bolívar
 	*******************************************************************************/
-    PROCEDURE Proc_Insert_DOCUMENT_TYPE
+    PROCEDURE Proc_Insert_DOCUMENTTYPE
     (
         IOp_Document_Type IN OUT NOCOPY tyrcDOCUMENT_TYPE
     );
@@ -31,13 +31,26 @@ Management Id: XD01
 
     
 	/*******************************************************************************
+	Description: Procedure that gets all document types
+	Author: Team B
+	Date 28-09-23
+	Management Id: XD01
+	@copyright: Seguros Bolívar
+	*******************************************************************************/
+    PROCEDURE Proc_Get_All_DOCUMENTTYPE
+    (
+        Op_Document_Type OUT NOCOPY tyrcDOCUMENT_TYPE
+    );
+
+
+	/*******************************************************************************
 	Description: Procedure that gets a document type object by its id
 	Author: Team B
 	Date 28-09-23
 	Management Id: XD01
 	@copyright: Seguros Bolívar
 	*******************************************************************************/
-    PROCEDURE Proc_Get_DOCUMENT_TYPE
+    PROCEDURE Proc_Get_DOCUMENTTYPE
     (
         Ip_Id IN NUMBER,
         Op_Document_Type OUT NOCOPY tyrcDOCUMENT_TYPE
@@ -52,7 +65,7 @@ Management Id: XD01
 	Management Id: XD01
 	@copyright: Seguros Bolívar
 	*******************************************************************************/
-    PROCEDURE Proc_Update_DOCUMENT_TYPE
+    PROCEDURE Proc_Update_DOCUMENTTYPE
     (
         IOp_Document_Type IN OUT NOCOPY tyrcDOCUMENT_TYPE
     );
@@ -89,23 +102,24 @@ CREATE OR REPLACE PACKAGE BODY PCK_DOCUMENT_TYPE IS
     END Proc_Get_DOCUMENT_TYPE;
     
 
- /* Get All Transaction Types */
-    PROCEDURE Proc_Get_All_TRANSACTIONTYPE(Op_Transaction_Type OUT NOCOPY tytbTRANSACTIONTYPE) IS
-        CURSOR cur_TRANSACTIONTYPE IS
+    /* Get all Document Types */
+    PROCEDURE Proc_Get_All_DOCUMENTTYPE(Op_Document_Type OUT NOCOPY tytbDOCUMENTTYPE) IS
+        CURSOR cur_DOCUMENTTYPE IS
             SELECT
-                transaction_type_id,
+                document_type_id,
+                type_code,
                 description
-            FROM TRANSACTION_TYPE;
+            FROM DOCUMENT_TYPE;
         idx BINARY_INTEGER := 1;
 
     BEGIN
-        FOR rec IN cur_TRANSACTIONTYPE LOOP
-            Op_Transaction_Type(idx) := rec;
+        FOR rec IN cur_DOCUMENTTYPE LOOP
+            Op_Document_Type(idx) := rec;
             idx := idx + 1;
         END LOOP;
     EXCEPTION
         WHEN NO_DATA_FOUND THEN 
-            RAISE_APPLICATION_ERROR(-20150, 'Error: No hay ningun resultado [PCK_TRANSACTION_TYPE.Proc_Get_All_TRANSACTIONTYPE]');
+            RAISE_APPLICATION_ERROR(-20150, 'Error: No hay ningun resultado [PCK_DOCUMENT_TYPE.Proc_Get_All_DOCUMENTTYPE]');
         WHEN OTHERS THEN
             RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
     END Proc_Get_All_TRANSACTIONTYPE;

@@ -15,6 +15,9 @@ Management Id: XD01
 
     /* Public variables declaration */
 
+
+    /* Public methods and functions declaration */
+
     /*******************************************************************************
     Description: Procedure that inserts a transaction object
     Author: Team B
@@ -27,6 +30,7 @@ Management Id: XD01
         IOp_Transaction IN OUT NOCOPY tyrcTRANSACTION
     );
 
+
     /*******************************************************************************
     Description: Procedure that gets all transactions
     Author: Team B
@@ -38,6 +42,7 @@ Management Id: XD01
     (
         Op_Transaction OUT NOCOPY tytbTRANSACTION
     );
+
 
     /*******************************************************************************
     Description: Procedure that gets a transaction by id

@@ -31,6 +31,7 @@ Management Id: XD01
         IOp_Account_Type IN OUT NOCOPY tyrcACCOUNTTYPE
     );
 
+
     /*******************************************************************************
     Description: Procedure that obtains all account types
     Author: Team B
@@ -42,6 +43,7 @@ Management Id: XD01
     (
         Op_Account_Type OUT NOCOPY tytbACCOUNTTYPE
     );
+
 
     /*******************************************************************************
     Description: Procedure that obtains an account type object
@@ -55,6 +57,7 @@ Management Id: XD01
         Ip_Id in NUMBER,
         Op_Account_Type OUT NOCOPY tyrcACCOUNTTYPE
     );
+
 
     /*******************************************************************************
     Description: Procedure that updates an account type object

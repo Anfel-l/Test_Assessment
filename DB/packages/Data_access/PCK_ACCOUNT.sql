@@ -31,6 +31,7 @@ Management Id: XD01
         IOp_ACCOUNT IN OUT NOCOPY tyrcACCOUNT
     );
 
+
     /*******************************************************************************
     Description: Procedure that obtains an account object
     Author: Team B
@@ -44,6 +45,7 @@ Management Id: XD01
         Op_ACCOUNT OUT NOCOPY tyrcACCOUNT
     );
 
+
     /*******************************************************************************
     Description: Procedure that obtains all customer account objects
     Author: Team B
@@ -56,6 +58,7 @@ Management Id: XD01
         Ip_Customer_Id in NUMBER,
         Op_ACCOUNT OUT NOCOPY tytbACCOUNTT
     );
+
 
     /*******************************************************************************
     Description: Procedure that updates an account object
