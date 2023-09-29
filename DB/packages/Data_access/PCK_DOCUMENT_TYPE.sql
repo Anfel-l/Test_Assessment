@@ -130,7 +130,7 @@ CREATE OR REPLACE PACKAGE BODY PCK_DOCUMENT_TYPE IS
             RAISE_APPLICATION_ERROR(-20150, 'Error: No hay ningun resultado [PCK_DOCUMENT_TYPE.Proc_Get_DOCUMENTTYPE]');
         WHEN OTHERS THEN
             RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
-    END Proc_Get_TRANSACTIONTYPE;
+    END Proc_Get_DOCUMENTTYPE;
 
     
     /* Procedure to update a document type */
