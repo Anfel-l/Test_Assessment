@@ -1,6 +1,6 @@
 CREATE OR REPLACE PACKAGE PCK_ACCOUNT_TYPE IS
 /*******************************************************************************
-Description: Table that stores information about bank's transactions
+Description: Package to manage data access for Account type records
 Author: Team B
 Date 22-09-23
 Management Id: XD01
@@ -40,7 +40,7 @@ Management Id: XD01
     *******************************************************************************/
     PROCEDURE Proc_Get_All_ACCOUNTTYPE
     (
-        Op_Account_Type OUT tytbACCOUNTTYPE
+        Op_Account_Type OUT NOCOPY tytbACCOUNTTYPE
     );
 
     /*******************************************************************************
@@ -94,9 +94,8 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT_TYPE IS
     END Proc_Insert_ACCOUNTTYPE;
 
 
-    /* Get All */
-    PROCEDURE Proc_Get_All_ACCOUNTTYPE(Op_Account_Type OUT tytbACCOUNTTYPE) IS
-    	ACCOUNT_TYPE_EXCEPTION EXCEPTION;
+    /* Get all account types */
+    PROCEDURE Proc_Get_All_ACCOUNTTYPE(Op_Account_Type OUT NOCOPY tytbACCOUNTTYPE) IS
     	CURSOR cur_ACCOUNTTYPE IS
 	        SELECT
 	            account_type_id,
@@ -115,6 +114,7 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT_TYPE IS
 	    WHEN OTHERS THEN
 	        RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
 	END Proc_Get_All_ACCOUNTTYPE;
+
 
     /* Get By Id*/
     PROCEDURE Proc_Get_ACCOUNTTYPE (Ip_Id IN NUMBER, Op_Account_Type OUT NOCOPY tyrcACCOUNTTYPE) IS
@@ -140,13 +140,11 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT_TYPE IS
     END Proc_Get_ACCOUNTTYPE;
 
 
-    /*update*/
+    /* Updates an account type */
     PROCEDURE Proc_Update_ACCOUNTTYPE (IOp_Account_Type IN OUT NOCOPY tyrcACCOUNTTYPE) IS
-        ACCOUNT_TYPE_EXCEPTION EXCEPTION;
         v_updated_record tyrcACCOUNTTYPE;
     BEGIN
         /* Update record */
-
         UPDATE ACCOUNT_TYPE
         SET rate = IOp_Account_Type.rate
         WHERE account_type_id = IOp_Account_Type.account_type_id;

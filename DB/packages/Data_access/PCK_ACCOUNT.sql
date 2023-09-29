@@ -1,6 +1,6 @@
 CREATE OR REPLACE PACKAGE PCK_ACCOUNT IS
 /*******************************************************************************
-Description: Table that stores information about bank's transactions
+Description: Package to manage data access for Account records
 Author: Team B
 Date 22-09-23
 Management Id: XD01
@@ -93,10 +93,8 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT IS
             RAISE_APPLICATION_ERROR(-20001, SQLCODE || ' => ' || SQLERRM);
     END Proc_Insert_ACCOUNT;
     
-    
+    /* Get By Id*/
     PROCEDURE Proc_Get_ACCOUNT (Ip_Id in NUMBER, Op_ACCOUNT out nocopy tyrcACCOUNT) IS
-
-        ACCOUNT_EXCEPTION EXCEPTION; 
 
         CURSOR cur_ACCOUNT IS
             SELECT 
@@ -110,7 +108,7 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT IS
                 updated_at,
                 closing_date 
             FROM ACCOUNT
-            WHERE /*+PCK_ACCOUNT.Proc_Get_ACCOUNT*/ ACCOUNT_id = Ip_Id;
+            WHERE /*+PCK_ACCOUNT.Proc_Get_ACCOUNT*/ account_id = Ip_Id;
 
     BEGIN
         OPEN cur_ACCOUNT;
@@ -124,19 +122,28 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT IS
             RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
     END Proc_Get_ACCOUNT;
 
-
+    /* Get All accounts by customer_id*/
     PROCEDURE Proc_Get_Customer_ACCOUNTS (Ip_Customer_Id in NUMBER, Op_ACCOUNTS OUT NOCOPY tytbACCOUNTT) IS
-    v_counter BINARY_INTEGER := 0; -- to index the collection
+        v_counter BINARY_INTEGER := 1; -- to index the collection
 
         CURSOR cur_Customer_Accounts IS
-            SELECT * 
+            SELECT 
+                account_id,
+                customer_id,
+                account_type_id,
+                created_branch_id,
+                balance,
+                password,
+                created_at,
+                updated_at,
+                closing_date 
             FROM ACCOUNT 
             WHERE customer_id = Ip_Customer_Id;
 
     BEGIN
         FOR record in cur_Customer_Accounts LOOP
-            v_counter := v_counter + 1;
             Op_ACCOUNTS(v_counter) := record;
+            v_counter := v_counter + 1;
         END LOOP;
 
     EXCEPTION 
@@ -147,31 +154,22 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT IS
     END Proc_Get_Customer_ACCOUNTS
 
 
-    /*update */
-    PROCEDURE Proc_Update_ACCOUNT (IOp_ACCOUNT IN OUT tyrcACCOUNT) IS
-        ACCOUNT_EXCEPTION EXCEPTION;
+    /*update*/
+    PROCEDURE Proc_Update_ACCOUNTT (IOp_Account IN OUT NOCOPY tyrcACCOUNT) IS
+        v_updated_record tyrcACCOUNT;
     BEGIN
-        -- Validación de entradas, si es necesario
-        IF IOp_ACCOUNT.account_id IS NULL OR IOp_ACCOUNT IS NULL THEN
-            RAISE ACCOUNT_EXCEPTION;
-        END IF;
-        
-        -- Actualizar registro
+        /* Update record */
+
         UPDATE ACCOUNT
         SET balance = IOp_ACCOUNT.balance,
             password = IOp_ACCOUNT.password,
             closing_date = IOp_ACCOUNT.closing_date
+        WHERE account_id = IOp_Account.account_id;
+       
+		Proc_Get_ACCOUNT(IOp_Account.account_id, v_updated_record);
+		IOp_Account := v_updated_record;
 
-            
-        WHERE account_id = IOp_ACCOUNT.account_id;
-        
-        IF SQL%NOTFOUND THEN
-            RAISE ACCOUNT_EXCEPTION;
-        END IF;
-        
     EXCEPTION
-        WHEN ACCOUNT_EXCEPTION THEN
-            RAISE_APPLICATION_ERROR(-20150, 'Error updating ACCOUNT with id ' || TO_CHAR(IOp_ACCOUNT.account_id) || ' [PCK_ACCOUNT.updACCOUNT]');
         WHEN OTHERS THEN
             RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
     END Proc_Update_ACCOUNT;

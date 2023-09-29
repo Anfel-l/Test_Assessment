@@ -14,17 +14,44 @@ Management Id: XD01
 
     /* Public methods and functions declaration */
     
+
+    
+	/*******************************************************************************
+	Description: Procedure that inserts a document type object
+	Author: Team B
+	Date 28-09-23
+	Management Id: XD01
+	@copyright: Seguros Bolívar
+	*******************************************************************************/
     PROCEDURE Proc_Insert_DOCUMENT_TYPE
     (
         IOp_Document_Type IN OUT NOCOPY tyrcDOCUMENT_TYPE
     );
     
+
+    
+	/*******************************************************************************
+	Description: Procedure that gets a document type object by its id
+	Author: Team B
+	Date 28-09-23
+	Management Id: XD01
+	@copyright: Seguros Bolívar
+	*******************************************************************************/
     PROCEDURE Proc_Get_DOCUMENT_TYPE
     (
         Ip_Id IN NUMBER,
         Op_Document_Type OUT NOCOPY tyrcDOCUMENT_TYPE
     );
     
+
+    
+	/*******************************************************************************
+	Description: Procedure that updates a document type 
+	Author: Team B
+	Date 28-09-23
+	Management Id: XD01
+	@copyright: Seguros Bolívar
+	*******************************************************************************/
     PROCEDURE Proc_Update_DOCUMENT_TYPE
     (
         IOp_Document_Type IN OUT NOCOPY tyrcDOCUMENT_TYPE
@@ -62,26 +89,69 @@ CREATE OR REPLACE PACKAGE BODY PCK_DOCUMENT_TYPE IS
     END Proc_Get_DOCUMENT_TYPE;
     
 
+ /* Get All Transaction Types */
+    PROCEDURE Proc_Get_All_TRANSACTIONTYPE(Op_Transaction_Type OUT NOCOPY tytbTRANSACTIONTYPE) IS
+        CURSOR cur_TRANSACTIONTYPE IS
+            SELECT
+                transaction_type_id,
+                description
+            FROM TRANSACTION_TYPE;
+        idx BINARY_INTEGER := 1;
+
+    BEGIN
+        FOR rec IN cur_TRANSACTIONTYPE LOOP
+            Op_Transaction_Type(idx) := rec;
+            idx := idx + 1;
+        END LOOP;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN 
+            RAISE_APPLICATION_ERROR(-20150, 'Error: No hay ningun resultado [PCK_TRANSACTION_TYPE.Proc_Get_All_TRANSACTIONTYPE]');
+        WHEN OTHERS THEN
+            RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
+    END Proc_Get_All_TRANSACTIONTYPE;
+
+
+    /* Get Document Type By Id */
+    PROCEDURE Proc_Get_DOCUMENTTYPE(Ip_Id IN NUMBER, Op_Document_Type OUT NOCOPY tyrcDOCUMENTTYPE) IS
+        CURSOR cur_DOCUMENTTYPE IS
+            SELECT
+                document_type_id,
+                type_code,
+                description
+            FROM DOCUMENT_TYPE
+            WHERE /*+PCK_DOCUMENT_TYPE.Proc_Get_DOCUMENTTYPE*/ document_type_id = Ip_Id;
+
+    BEGIN
+        OPEN cur_DOCUMENTTYPE;
+        FETCH cur_DOCUMENTTYPE INTO Op_Document_Type;
+        CLOSE cur_DOCUMENTTYPE;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN 
+            RAISE_APPLICATION_ERROR(-20150, 'Error: No hay ningun resultado [PCK_TRANSACTION_TYPE.Proc_Get_DOCUMENTTYPE]');
+        WHEN OTHERS THEN
+            RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
+    END Proc_Get_TRANSACTIONTYPE;
+
     
     /* Procedure to update a document type */
     PROCEDURE Proc_Update_DOCUMENT_TYPE(IOp_Document_Type IN OUT NOCOPY tyrcDOCUMENT_TYPE) IS
-BEGIN
-    UPDATE DOCUMENT_TYPE
-    SET type_code = IOp_Document_Type.type_code,
-        description = IOp_Document_Type.description
-    WHERE document_type_id = IOp_Document_Type.document_type_id;
+    BEGIN
+        UPDATE DOCUMENT_TYPE
+        SET type_code = IOp_Document_Type.type_code,
+            description = IOp_Document_Type.description
+        WHERE document_type_id = IOp_Document_Type.document_type_id;
 
-    IF SQL%ROWCOUNT = 0 THEN
-        RAISE_APPLICATION_ERROR(-20150, 'Error: No hay ningun resultado [PCK_DOCUMENT_TYPE.updDOCUMENT_TYPE]');
-    END IF;
+        IF SQL%ROWCOUNT = 0 THEN
+            RAISE_APPLICATION_ERROR(-20150, 'Error: No hay ningun resultado [PCK_DOCUMENT_TYPE.updDOCUMENT_TYPE]');
+        END IF;
 
-    -- Obtener el registro actualizado y asignarlo a IOp_Document_Type
-    Proc_Get_DOCUMENT_TYPE(IOp_Document_Type.document_type_id, IOp_Document_Type);
+        -- Obtener el registro actualizado y asignarlo a IOp_Document_Type
+        Proc_Get_DOCUMENT_TYPE(IOp_Document_Type.document_type_id, IOp_Document_Type);
 
-EXCEPTION
-    WHEN OTHERS THEN
-        RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
-END Proc_Update_DOCUMENT_TYPE;
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
+    END Proc_Update_DOCUMENT_TYPE;
 
 
 END PCK_DOCUMENT_TYPE;
