@@ -9,7 +9,7 @@ Management_id: XD01
 CREATE TABLE TPT_USER_DBA.CUSTOMER(
     customer_id NUMBER(10),
     first_name VARCHAR2(20) NOT NULL,
-    second_name VARCHAR2 (20),
+    second_name VARCHAR2(20),
     last_name VARCHAR2(20) NOT NULL,
     second_last_name VARCHAR2(20),
     birthdate DATE NOT NULL,
