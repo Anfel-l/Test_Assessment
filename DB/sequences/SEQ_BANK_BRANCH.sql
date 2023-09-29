@@ -6,4 +6,4 @@ Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-CREATE SEQUENCE USER.SEQ_BANK_BRANCH START WITH 1 NOMAXVALUE NOCYCLE;
+CREATE SEQUENCE TPT_USER_DBA.SEQ_BANK_BRANCH START WITH 1 NOMAXVALUE NOCYCLE;

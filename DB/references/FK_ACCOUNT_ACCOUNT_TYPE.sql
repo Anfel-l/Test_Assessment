@@ -6,5 +6,5 @@ Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-ALTER TABLE USER.ACCOUNT ADD CONSTRAINT FK_ACCOUNT_ACCOUNT_TYPE FOREIGN KEY (account_type_id) REFERENCES USER.ACCOUNT_TYPE (account_type_id)
+ALTER TABLE TPT_USER_DBA.ACCOUNT ADD CONSTRAINT FK_ACCOUNT_ACCOUNT_TYPE FOREIGN KEY (account_type_id) REFERENCES TPT_USER_DBA.ACCOUNT_TYPE (account_type_id)
 /

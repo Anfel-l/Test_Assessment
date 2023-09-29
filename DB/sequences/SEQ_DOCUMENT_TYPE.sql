@@ -6,4 +6,4 @@ Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-CREATE SEQUENCE USER.SEQ_DOCUMENT_TYPE START WITH 1 NOMAXVALUE NOCYCLE;
+CREATE SEQUENCE TPT_USER_DBA.SEQ_DOCUMENT_TYPE START WITH 1 NOMAXVALUE NOCYCLE;
