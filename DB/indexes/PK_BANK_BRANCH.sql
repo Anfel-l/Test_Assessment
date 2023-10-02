@@ -6,5 +6,4 @@ Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-ALTER TABLE TPT_USER_DBA.BANK_BRANCH ADD CONSTRAINT PK_BANK_BRANCH PRIMARY KEY (bank_branch_id)
-/
+ALTER TABLE TPT_USER_DBA.BANK_BRANCH ADD CONSTRAINT PK_BANK_BRANCH PRIMARY KEY (bank_branch_id);

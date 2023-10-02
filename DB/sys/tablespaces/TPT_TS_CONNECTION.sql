@@ -6,7 +6,6 @@ Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 CREATE TABLESPACE TS_CONNECTION
-DATAFILE '/TS_TPT_CONNECTION.DBF'
+DATAFILE 'C:/tablespaces/TS_TPT_CONNECTION.DBF'
 SIZE 100M AUTOEXTEND ON 
 NEXT 50M MAXSIZE UNLIMITED;
-/

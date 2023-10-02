@@ -1,5 +1,5 @@
 CREATE OR REPLACE PACKAGE PCK_BANK_BRANCH IS
-/*******************************************************************************
+/******************************************************************************
 Description: Package to manage data access for Bank branch records
 Author: Team B
 Date 22-09-23
@@ -100,16 +100,23 @@ CREATE OR REPLACE PACKAGE BODY PCK_BANK_BRANCH IS
     	CURSOR cur_BANKBRANCH IS
 	        SELECT
 	            bank_branch_id,
-	            bank_branch_name,
+	            branch_name,
 	            address,
                 phone_number,
                 is_digital,
-                created_at
+                created_at,
+                updated_at
 	        FROM BANK_BRANCH;
 		    idx BINARY_INTEGER := 1;
 	BEGIN
-	    FOR rec IN cur_BANKBRANCH LOOP
-	        Op_Bank_Branch(idx) := rec;
+	    FOR record IN cur_BANKBRANCH LOOP
+	        Op_Bank_Branch(idx).bank_branch_id := record.bank_branch_id;
+            Op_Bank_Branch(idx).branch_name := record.branch_name;
+            Op_Bank_Branch(idx).address := record.address;
+            Op_Bank_Branch(idx).phone_number := record.phone_number;
+            Op_Bank_Branch(idx).is_digital := record.is_digital;
+            Op_Bank_Branch(idx).created_at := record.created_at;
+            Op_Bank_Branch(idx).updated_at := record.updated_at;
 	        idx := idx + 1;
 	    END LOOP;
 	EXCEPTION
@@ -126,11 +133,12 @@ CREATE OR REPLACE PACKAGE BODY PCK_BANK_BRANCH IS
         CURSOR cur_BANKBRANCH IS
             SELECT 
                 bank_branch_id,
-	            bank_branch_name,
+	            branch_name,
 	            address,
                 phone_number,
                 is_digital,
-                created_at
+                created_at,
+                updated_at
             FROM BANK_BRANCH
             WHERE /*+PCK_BANK_BRANCH.Proc_Get_BANKBRANCH*/ bank_branch_id = Ip_Id;
 

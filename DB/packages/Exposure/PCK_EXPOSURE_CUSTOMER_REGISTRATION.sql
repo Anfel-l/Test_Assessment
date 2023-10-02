@@ -1,5 +1,5 @@
 CREATE OR REPLACE PACKAGE PCK_EXPOSURE_CUSTOMER_REGISTRATION IS
-/*******************************************************************************
+/******************************************************************************
 Description: Package to manage data access for Transaction records
 Author: Team B
 Date 22-09-23

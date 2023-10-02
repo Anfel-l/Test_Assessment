@@ -1,5 +1,5 @@
 CREATE OR REPLACE PACKAGE PCK_CUSTOMER IS
-/*******************************************************************************
+/******************************************************************************
 Description: Package to manage data access for Customer records
 Author: Team B
 Date 22-09-23
@@ -167,21 +167,9 @@ CREATE OR REPLACE PACKAGE BODY PCK_CUSTOMER IS
 	END Proc_Get_CUSTOMER;
 
 
-	/* Update customer */
-	PROCEDURE Proc_Update_CUSTOMER (IOp_Customer IN OUT NOCOPY tyrcCUSTOMER) IS
-
-	BEGIN
-
-	EXCEPTION
-		WHEN OTHERS THEN
-			RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
-
-	END Proc_Update_CUSTOMER;
-
-
 	/* Updates a customer */
     PROCEDURE Proc_Update_CUSTOMER (IOp_Customer IN OUT NOCOPY tyrcCUSTOMER) IS
-        v_updated_record tyrcACCOUNTTYPE;
+        v_updated_record tyrcCUSTOMER;
     BEGIN
         /* Update record */
         UPDATE CUSTOMER
@@ -189,7 +177,7 @@ CREATE OR REPLACE PACKAGE BODY PCK_CUSTOMER IS
 			second_name = IOp_Customer.second_name,
 			last_name = IOp_Customer.last_name,
 			second_last_name = IOp_Customer.second_last_name,
-			document_type_id = IOp_Customer.document_type_id
+			document_type_id = IOp_Customer.document_type_id,
 			address = IOp_Customer.address,
 			email = IOp_Customer.email,
 			phone_number = IOp_Customer.phone_number,

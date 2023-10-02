@@ -1,5 +1,5 @@
 CREATE OR REPLACE PACKAGE PCK_TRANSACTION IS
-/*******************************************************************************
+/******************************************************************************
 Description: Package to manage data access for Transaction records
 Author: Team B
 Date 22-09-23
@@ -9,7 +9,7 @@ Management Id: XD01
 
     /* Public data types declaration */
 
-    SUBTYPE tyrcTRANSACTION IS `TRANSACTION`%ROWTYPE;
+    SUBTYPE tyrcTRANSACTION IS TRANSACTION%ROWTYPE;
 
     TYPE tytbTRANSACTION IS TABLE OF tyrcTRANSACTION INDEX BY BINARY_INTEGER;
 
@@ -68,11 +68,11 @@ CREATE OR REPLACE PACKAGE BODY PCK_TRANSACTION IS
         IOp_Transaction.transaction_id := SEQ_TRANSACTION.NEXTVAL;
 
         -- Insert Register
-        INSERT INTO TRANSACTION VALUES IOp_Transaction;
+        INSERT INTO TRANSACTION VALUES /*+PCK_TRANSACTION.Proc_Insert_TRANSACTION*/ IOp_Transaction;
     -- Throw Exception
     EXCEPTION
         WHEN DUP_VAL_ON_INDEX THEN
-            RAISE_APPLICATION_ERROR(-20000, 'Uy zona Uy zona(●'◡'●)(❁´◡`❁)');
+            RAISE_APPLICATION_ERROR(-20000, 'Uy zona Uy zona');
         WHEN OTHERS THEN
             RAISE_APPLICATION_ERROR(-20001, SQLCODE || ' => ' || SQLERRM);
     END Proc_Insert_TRANSACTIOn;
@@ -88,7 +88,8 @@ CREATE OR REPLACE PACKAGE BODY PCK_TRANSACTION IS
                 account_id,
                 destination_account_id,
                 amount,
-            FROM `TRANSACTION`;
+                created_at
+            FROM TRANSACTION;
             idx BINARY_INTEGER := 1;
     BEGIN
         FOR rec IN cur_TRANSACTION LOOP
@@ -97,14 +98,14 @@ CREATE OR REPLACE PACKAGE BODY PCK_TRANSACTION IS
         END LOOP;
 	EXCEPTION
 	    WHEN NO_DATA_FOUND THEN 
-	        RAISE_APPLICATION_ERROR(-20150, 'Uy zona(●'◡'●)(❁´◡`❁)');
+	        RAISE_APPLICATION_ERROR(-20150, 'Uy zona');
 	    WHEN OTHERS THEN
 	        RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
 	END Proc_Get_All_TRANSACTION;
 
 
     /*Get Transaction by ID*/
-    PROCEDURE Proc_Get_TRANSACTION (Ip_Id IN NUMBER, Op_Transaction) IS
+    PROCEDURE Proc_Get_TRANSACTION (Ip_Id IN NUMBER, Op_Transaction OUT NOCOPY tyrcTRANSACTION) IS
 
         CURSOR cur_TRANSACTION IS
             SELECT 
@@ -114,7 +115,8 @@ CREATE OR REPLACE PACKAGE BODY PCK_TRANSACTION IS
                 account_id,
                 destination_account_id,
                 amount,
-            FROM `TRANSACTION`
+                created_at
+            FROM TRANSACTION
             WHERE transaction_id = Ip_Id;
 
     BEGIN
@@ -124,16 +126,9 @@ CREATE OR REPLACE PACKAGE BODY PCK_TRANSACTION IS
 
     EXCEPTION 
         WHEN NO_DATA_FOUND THEN 
-            RAISE_APPLICATION_ERROR(-20150, 'Uy zona(●'◡'●)(❁´◡`❁)');
+            RAISE_APPLICATION_ERROR(-20150, 'Uy zona');
         WHEN OTHERS THEN
             RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
     END Proc_Get_TRANSACTION;
 
-END PCK_TRANSACTION
-    
-
-    
-
-
-
-
+END PCK_TRANSACTION;

@@ -6,7 +6,6 @@ Management Id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 CREATE TABLESPACE TS_MANAGER
-DATAFILE '/TS_TPT_MANAGER.DBF'
+DATAFILE 'C:/tablespaces/TS_TPT_MANAGER.DBF'
 SIZE 100M AUTOEXTEND ON
 NEXT 50M MAXSIZE UNLIMITED;
-/

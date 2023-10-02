@@ -6,5 +6,4 @@ Management_id: XD01
 @copyright: Seguros Bolívar
 *******************************************************************************/
 
-ALTER TABLE TPT_USER_DBA.TRANSACTION ADD CONSTRAINT PK_TRANSACTION PRIMARY KEY (transaction_id)
-/
+ALTER TABLE TPT_USER_DBA.TRANSACTION ADD CONSTRAINT PK_TRANSACTION PRIMARY KEY (transaction_id);

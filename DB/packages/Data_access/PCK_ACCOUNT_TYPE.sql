@@ -1,5 +1,5 @@
 CREATE OR REPLACE PACKAGE PCK_ACCOUNT_TYPE IS
-/*******************************************************************************
+/******************************************************************************
 Description: Package to manage data access for Account type records
 Author: Team B
 Date 22-09-23

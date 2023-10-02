@@ -1,5 +1,5 @@
 CREATE OR REPLACE PACKAGE PCK_ACCOUNT IS
-/*******************************************************************************
+/******************************************************************************
 Description: Package to manage data access for Account records
 Author: Team B
 Date 22-09-23
@@ -9,9 +9,9 @@ Management Id: XD01
 
     /* Public datas declaration */
 
-    SUBTYPE tyrcACCOUNTT IS ACCOUNT%ROWTYPE;
+    SUBTYPE tyrcACCOUNT IS ACCOUNT%ROWTYPE;
 
-    TYPE tytbACCOUNTT IS TABLE OF tyrcACCOUNT INDEX BY BINARY_INTEGER;
+    TYPE tytbACCOUNT IS TABLE OF tyrcACCOUNT INDEX BY BINARY_INTEGER;
 
     /* Public variables declaration */
 
@@ -53,10 +53,10 @@ Management Id: XD01
     Management Id: XD01
     @copyright: Seguros Bolívar
     *******************************************************************************/
-    PROCEDURE Proc_Get_Customer_ACCOUNTS
+    PROCEDURE Proc_Get_Customer_Accounts
     (
-        Ip_Customer_Id in NUMBER,
-        Op_ACCOUNT OUT NOCOPY tytbACCOUNTT
+       Ip_Customer_Id in NUMBER, 
+       Op_Accounts OUT NOCOPY tytbACCOUNT
     );
 
 
@@ -83,7 +83,7 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT IS
 
     BEGIN
         -- Initialize values
-        IOp_Account.ACCOUNTid := SEQ_ACCOUNT.NEXTVAL;
+        IOp_Account.ACCOUNT_id := SEQ_ACCOUNT.NEXTVAL;
 
         -- Insert register
         INSERT INTO ACCOUNT VALUES /*+PCK_ACCOUNT.Proc_Insert_ACCOUNT*/ IOp_ACCOUNT;
@@ -91,7 +91,7 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT IS
     -- Throw Exception
     EXCEPTION
         WHEN DUP_VAL_ON_INDEX THEN
-            RAISE_APPLICATION_ERROR(-20000, 'Error: Valor duplicado en la clave primaria o única [PCK_ACCOUNT.insACCOUNT]');
+            RAISE_APPLICATION_ERROR(-20000, 'Error: Valor duplicado en la clave primaria o única [PCK_ACCOUNT.Proc_Insert_ACCOUNT]');
         WHEN OTHERS THEN
             RAISE_APPLICATION_ERROR(-20001, SQLCODE || ' => ' || SQLERRM);
     END Proc_Insert_ACCOUNT;
@@ -99,34 +99,42 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT IS
     /* Get By Id*/
     PROCEDURE Proc_Get_ACCOUNT (Ip_Id in NUMBER, Op_ACCOUNT out nocopy tyrcACCOUNT) IS
 
-        CURSOR cur_ACCOUNT IS
-            SELECT 
-                account_id,
-                customer_id,
-                account_type_id,
-                created_branch_id,
-                balance,
-                password,
-                created_at,
-                updated_at,
-                closing_date 
-            FROM ACCOUNT
-            WHERE /*+PCK_ACCOUNT.Proc_Get_ACCOUNT*/ account_id = Ip_Id;
+    CURSOR cur_ACCOUNT IS
+        SELECT 
+            account_id,
+            customer_id,
+            account_type_id,
+            created_branch_id,
+            balance,
+            password,
+            created_at,
+            updated_at,
+            closing_date 
+        FROM ACCOUNT
+        WHERE account_id = Ip_Id;
 
-    BEGIN
-        OPEN cur_ACCOUNT;
-        FETCH cur_ACCOUNT INTO Op_ACCOUNT;
-        CLOSE cur_ACCOUNT;
-    
-    EXCEPTION 
-        WHEN NO_DATA_FOUND THEN 
-            RAISE_APPLICATION_ERROR(-20150, 'Error: No hay ningun resultado [PCK_ACCOUNT.Proc_Get_ACCOUNT]');
-        WHEN OTHERS THEN
-            RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
-    END Proc_Get_ACCOUNT;
+    v_count INT := 0;
+
+	BEGIN
+	    OPEN cur_ACCOUNT;
+	    FETCH cur_ACCOUNT INTO Op_ACCOUNT;
+	    v_count := cur_ACCOUNT%ROWCOUNT;
+	    CLOSE cur_ACCOUNT;
+	
+	    IF
+			v_count = 0 THEN
+		        RAISE_APPLICATION_ERROR(-20150,
+			'Error: No hay ningun resultado [PCK_ACCOUNT.Proc_Get_ACCOUNT]');
+		END IF;
+	
+	EXCEPTION
+	    WHEN OTHERS THEN
+	        RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
+	END Proc_Get_ACCOUNT;
+
 
     /* Get All accounts by customer_id*/
-    PROCEDURE Proc_Get_Customer_ACCOUNTS (Ip_Customer_Id in NUMBER, Op_ACCOUNTS OUT NOCOPY tytbACCOUNTT) IS
+    PROCEDURE Proc_Get_Customer_Accounts (Ip_Customer_Id in NUMBER, Op_Accounts OUT NOCOPY tytbACCOUNT) IS
         v_counter BINARY_INTEGER := 1; -- to index the collection
 
         CURSOR cur_Customer_Accounts IS
@@ -145,20 +153,28 @@ CREATE OR REPLACE PACKAGE BODY PCK_ACCOUNT IS
 
     BEGIN
         FOR record in cur_Customer_Accounts LOOP
-            Op_ACCOUNTS(v_counter) := record;
+            Op_Accounts(v_counter).account_id := record.account_id;
+            Op_Accounts(v_counter).customer_id := record.customer_id;
+            Op_Accounts(v_counter).account_type_id := record.account_type_id;
+            Op_Accounts(v_counter).created_branch_id := record.created_branch_id;
+            Op_Accounts(v_counter).balance := record.balance;
+            Op_Accounts(v_counter).password := record.password;
+            Op_Accounts(v_counter).created_at := record.created_at;
+            Op_Accounts(v_counter).updated_at := record.updated_at;
+            Op_Accounts(v_counter).closing_date := record.closing_date;
             v_counter := v_counter + 1;
         END LOOP;
 
     EXCEPTION 
         WHEN NO_DATA_FOUND THEN 
-            RAISE_APPLICATION_ERROR(-20150, 'Error: No hay cuentas para el cliente con ID ' || TO_CHAR(Ip_Customer_Id) || ' [PCK_ACCOUNT.Proc_Get_Customer_ACCOUNTS]');
+            RAISE_APPLICATION_ERROR(-20150, 'Error: No hay cuentas para el cliente con ID ' || TO_CHAR(Ip_Customer_Id) || ' [PCK_ACCOUNT.Proc_Get_Customer_Accounts]');
         WHEN OTHERS THEN
             RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
-    END Proc_Get_Customer_ACCOUNTS
+    END Proc_Get_Customer_Accounts;
 
 
     /*update*/
-    PROCEDURE Proc_Update_ACCOUNTT (IOp_Account IN OUT NOCOPY tyrcACCOUNT) IS
+    PROCEDURE Proc_Update_ACCOUNT (IOp_Account IN OUT NOCOPY tyrcACCOUNT) IS
         v_updated_record tyrcACCOUNT;
     BEGIN
         /* Update record */
