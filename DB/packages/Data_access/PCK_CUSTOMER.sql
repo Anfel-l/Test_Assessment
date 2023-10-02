@@ -58,6 +58,11 @@ Management Id: XD01
 		Op_Customer OUT NOCOPY tyrcCUSTOMER
 	);
 
+	PROCEDURE Proc_Get_CUSTOMER_by_document (
+		Ip_document IN Customer.document%TYPE,
+		Op_Customer OUT NOCOPY tyrcCUSTOMER
+	);
+
 
 	/*******************************************************************************
 	Description: Procedure that updates a customer object
@@ -124,9 +129,9 @@ CREATE OR REPLACE PACKAGE BODY PCK_CUSTOMER IS
 
 	EXCEPTION
 		WHEN NO_DATA_FOUND THEN
-            RAISE_APPLICATION_ERROR(-20150, 'Error: No hay ningun resultado [PCK_ACCOUNT_TYPE.Proc_Get_CUSTOMER]');
+            CLOSE cur_CUSTOMER;
         WHEN OTHERS THEN
-            RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
+            RAISE_APPLICATION_ERROR(-20199, 'Error: [PCK_ACCOUNT_TYPE.Proc_Get_CUSTOMER]' || SQLCODE || ' => ' || SQLERRM);
 	END Proc_Get_All_CUSTOMER;
 
 
@@ -165,6 +170,42 @@ CREATE OR REPLACE PACKAGE BODY PCK_CUSTOMER IS
         WHEN OTHERS THEN
             RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
 	END Proc_Get_CUSTOMER;
+
+	/* Get customer by document */
+	PROCEDURE Proc_Get_CUSTOMER_by_document (Ip_document IN Customer.document%TYPE, Op_Customer OUT NOCOPY tyrcCUSTOMER) IS
+
+		CUSTOM_EXCEPTION EXCEPTION;
+
+		CURSOR cur_CUSTOMER IS
+		SELECT 
+			customer_id, 
+			first_name, 
+			second_name, 
+			last_name, 
+			second_last_name,
+			birthdate, 
+			document, 
+			document_type_id, 
+			address, 
+			email, 
+			phone_number,
+			password,
+			created_at,
+			updated_at
+		FROM CUSTOMER
+		WHERE /*+PCK_CUSTOMER.Proc_Get_CUSTOMER_by_document*/ document = Ip_document;
+
+	BEGIN
+		OPEN cur_CUSTOMER;
+		FETCH cur_CUSTOMER INTO Op_Customer;
+		CLOSE cur_CUSTOMER;
+
+	EXCEPTION
+		WHEN NO_DATA_FOUND THEN
+            RAISE_APPLICATION_ERROR(-20150, 'Error: No hay ningun resultado [PCK_ACCOUNT_TYPE.Proc_Get_CUSTOMER]');
+        WHEN OTHERS THEN
+            RAISE_APPLICATION_ERROR(-20199, SQLCODE || ' => ' || SQLERRM);
+	END Proc_Get_CUSTOMER_by_document;
 
 
 	/* Updates a customer */
